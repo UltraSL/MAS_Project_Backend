@@ -17,6 +17,8 @@ const client = new OAuth2Client(
 const bcrypt = require("bcrypt");
 const { userRegistrationValidation, loginValidate } = require("../validation");
 
+
+//User Register
 exports.addUser = async function (req, res) {
   let userData = req.body;
   User.findOne({ email: req.body.email }, (error, user) => {
@@ -42,4 +44,28 @@ exports.addUser = async function (req, res) {
     }
   })
 };
-/////////////////////////
+
+//User Login
+exports.loginUser = async function (req, res) {
+  let userData = req.body;
+  User.findOne({ email: userData.email }, (error, user) => {
+    if (error) {
+      console.log(error);
+    } else if (!user) {
+      res.status(401).send("Invalid email");
+    } else {
+      bcrypt.compare(userData.password, user.password, (error,result) => {
+        if(error){
+          console.log(error)
+        } else if(!result){
+          res.status(402).send("Invalid Password");
+        }
+        else if(result){
+          let payload = { subject: user._id };
+          let token = jwt.sign(payload, "secretKey");
+          res.status(200).json({ token, user });
+        }
+      })
+    } 
+  });
+}
