@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const requestSchema = new Schema ({
+    user_id : String,
     reason : String,
     dateOfReservation : String,
     timeOfReservation : String,
@@ -10,12 +11,13 @@ const requestSchema = new Schema ({
     timeOfTrip : String,
     locationFrom : String,
     locationTo : String,
-    vehicleType : {
+    vehicleType : String,
+    status : {
         type: [{
             type: String,
-            enum: ['threeWheel', 'car', 'van']
+            enum: ['pending', 'approved', 'rejected']
         }],
-        default: ['threeWheel']
+        default: ['pending']
     }
 })
 

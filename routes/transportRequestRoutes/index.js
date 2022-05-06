@@ -7,6 +7,7 @@ routes.post("/sendRequest", TransportRequestController.sendRequest);
 routes.get("/getAllRequests", TransportRequestController.getAllRequests);
 routes.put("/updateRequestById/:id", TransportRequestController.updateRequestById);
 routes.delete("/deleteRequestById/:id", TransportRequestController.deleteRequestById);
+routes.get("/getAllRequestsByUserId/:id", TransportRequestController.getAllRequestsByUserId);
 
 
 

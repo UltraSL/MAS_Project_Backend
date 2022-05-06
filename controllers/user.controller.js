@@ -89,6 +89,7 @@ exports.loginUser = async function (req, res) {
       code: 200,
       success: true,
       token: token,
+      data : res._id,
       message: "logged in successfully",
     });
   } catch (error) {
