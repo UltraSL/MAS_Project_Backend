@@ -8,7 +8,7 @@ exports.sendRequest = async function (req, res) {
 
         request.save(async (error, addedRequest) => {
             if (error) {
-                console.log(error)
+                res.status(400).json("Error"+ error)
               } else {
                 res.status(200).json(addedRequest);
               }
@@ -25,6 +25,18 @@ exports.getAllRequests = async function (req, res) {
                 res.status(200).json(requests);
             }
         })
+}
+
+//Get Requests By User Id
+exports.getAllRequestsByUserId = async function (req, res) {
+  Request.find({user_id : req.params.id})
+      .exec(function (err, requests) {
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(requests);
+          }
+      })
 }
 
 //Update Request By Id
