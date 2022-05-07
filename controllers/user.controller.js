@@ -26,17 +26,18 @@ exports.addUser = async function (req, res) {
     return res
       .status(200)
       .json({ code: 200, success: true, message: "Email already available" });
-
+console.log(body)
   const user = new User({
     empNumber: body.empNumber,
     firstName: body.firstName,
     lastName: body.lastName,
     email: body.email,
     password: body.password,
-    role: body.role,
+    position: body.position,
     mobile: body.mobile,
     supervisorName: body.supervisorName,
     NICNumber: body.NICNumber,
+    department: body.department,
   });
   try {
     var savedUser = await user.save();
@@ -47,7 +48,7 @@ exports.addUser = async function (req, res) {
       success: true,
       data: savedUser,
       token: token,
-      message: "Registration Successfully.",
+      message: "Registration Successfully",
     });
   } catch (error) {
     res
@@ -56,8 +57,10 @@ exports.addUser = async function (req, res) {
   }
 };
 //user login
+
 exports.loginUser = async function (req, res) {
   try {
+    console.log("req.body", req.body);
     const { error } = loginValidate(req.body);
     if (error)
       return res.status(200).json({
@@ -65,16 +68,16 @@ exports.loginUser = async function (req, res) {
         success: false,
         message: error.details[0].message,
       });
-
+console.log("1")
     const user = await User.findOne({ email: req.body.email }).select(
       "+password"
     );
-
+    console.log("11")
     if (!user)
       return res
         .status(200)
         .json({ code: 200, success: false, message: "Invalid userName" });
-
+        console.log("12")
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
@@ -84,7 +87,9 @@ exports.loginUser = async function (req, res) {
       return res
         .status(200)
         .json({ code: 200, success: false, message: "Invalid Password" });
+        console.log("1")
     const token = utils.generateAuthToken(user);
+    console.log("2",token)
     res.status(200).json({
       code: 200,
       success: true,
@@ -98,6 +103,42 @@ exports.loginUser = async function (req, res) {
       .json({ code: 500, success: false, message: "Internal Server Error" });
   }
 };
+
+
+/*
+ 
+exports.loginUser = async function (req, res) {
+var AdminData = req.body;
+console.log(AdminData);
+User.findOne({ email: AdminData.email }, (error, User) => {
+  if (error) {
+    console.log(error);
+  } else if (!User) {
+    res.status(401).send("Invalid email");
+    
+  } else {
+
+    bcrypt.compare(AdminData.password, User.password, (error,result) => {
+      if(error){
+        console.log(error)
+      } else if(!result){
+        res.status(402).send("Invalid Password");
+      }
+      else if(result){
+        let payload = { subject: User._id };
+        let AdminToken = jwt.sign(payload, "secretKey");
+        console.log("no Error password")
+        res.status(200).json({ AdminToken, User });
+      }
+    })
+
+  } 
+
+});
+};
+
+*/
+
 //get user by id
 exports.getUser = function (req, res) {
   try {
