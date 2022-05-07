@@ -7,10 +7,11 @@ const userRegistrationValidation = (data) => {
       lastName: Joi.string().required().label("lastName"),
       email: Joi.string().email().required().label("Email"),
       password: Joi.string().required().label("Password").min(6),
-      role: Joi.string().required().label("role"),
+      position: Joi.string().required().label("position"),
       mobile: Joi.string().required().label("mobile"),
       supervisorName: Joi.string().required().label("supervisorName"),
-      NICNumber: Joi.string().required().label("NICNumber"),
+      NICNumber: Joi.string().required().label("NICNumber"), 
+      department: Joi.string().required().label("department"),
 });
 return schema.validate(data);
 };
