@@ -60,7 +60,6 @@ console.log(body)
 
 exports.loginUser = async function (req, res) {
   try {
-    console.log("req.body", req.body);
     const { error } = loginValidate(req.body);
     if (error)
       return res.status(200).json({
@@ -68,16 +67,15 @@ exports.loginUser = async function (req, res) {
         success: false,
         message: error.details[0].message,
       });
-console.log("1")
     const user = await User.findOne({ email: req.body.email }).select(
       "+password"
     );
-    console.log("11")
+
     if (!user)
       return res
         .status(200)
         .json({ code: 200, success: false, message: "Invalid userName" });
-        console.log("12")
+
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
@@ -89,12 +87,12 @@ console.log("1")
         .json({ code: 200, success: false, message: "Invalid Password" });
         console.log("1")
     const token = utils.generateAuthToken(user);
-    console.log("2",token)
+
     res.status(200).json({
       code: 200,
       success: true,
       token: token,
-      data : res._id,
+      data : user,
       message: "logged in successfully",
     });
   } catch (error) {
