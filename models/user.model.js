@@ -6,6 +6,9 @@ const userSchema = new Schema({
   empNumber: {
     type: String,
     required: true,
+  },username :{
+    type: String,
+    required: true,
   },
   firstName: {
     type: String,

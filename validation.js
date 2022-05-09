@@ -9,6 +9,7 @@ const userRegistrationValidation = (data) => {
       password: Joi.string().required().label("Password").min(6),
       position: Joi.string().required().label("position"),
       mobile: Joi.string().required().label("mobile"),
+      username: Joi.string().required().label("username"),
       supervisorName: Joi.string().required().label("supervisorName"),
       NICNumber: Joi.string().required().label("NICNumber"), 
       department: Joi.string().required().label("department"),

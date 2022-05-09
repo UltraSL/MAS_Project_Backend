@@ -29,6 +29,7 @@ exports.addUser = async function (req, res) {
 console.log(body)
   const user = new User({
     empNumber: body.empNumber,
+    username: body.username,
     firstName: body.firstName,
     lastName: body.lastName,
     email: body.email,
@@ -197,6 +198,7 @@ exports.updateUserProfileByID = async function (req, res) {
 
     const data = {
       firstName: req.body.firstName || user.firstName,
+      username: req.body.username || user.username,
       image: result.secure_url || user.image,
       lastName: req.body.lastName || user.lastName,
       image: result?.secure_url || user.image,
