@@ -190,22 +190,17 @@ exports.getAllUsers = async function (req, res) {
 exports.updateUserProfileByID = async function (req, res) {
   try {
     let user = await User.findById(req.params.id);
-    let result;
-
-    if (req.file.path) {
-      result = await cloudinary.uploader.upload(req.file.path);
-    }
 
     const data = {
       firstName: req.body.firstName || user.firstName,
       username: req.body.username || user.username,
-      image: result.secure_url || user.image,
       lastName: req.body.lastName || user.lastName,
-      image: result?.secure_url || user.image,
       email: req.body.email || user.email,
       mobile: req.body.mobile || user.mobile,
       supervisorName: req.body.supervisorName || user.supervisorName,
       NICNumber: req.body.NICNumber || user.NICNumber,
+      position : req.body.position || user.position,
+      department : req.body.department || user.department
     };
 
     console.log("data", data);
