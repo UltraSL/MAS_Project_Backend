@@ -204,6 +204,8 @@ exports.updateUserProfileByID = async function (req, res) {
         mobile: req.body.mobile || user.mobile,
         supervisorName: req.body.supervisorName || user.supervisorName,
         NICNumber: req.body.NICNumber || user.NICNumber,
+        position:req.body.position || user.position,
+        department :req.body.department || user.department,
       };
       console.log("1")
       console.log("data", data);
@@ -223,6 +225,8 @@ exports.updateUserProfileByID = async function (req, res) {
         mobile: req.body.mobile || user.mobile,
         supervisorName: req.body.supervisorName || user.supervisorName,
         NICNumber: req.body.NICNumber || user.NICNumber,
+        position:req.body.position || user.position,
+        department :req.body.department || user.department,
       };
       user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
       res.status(200).json({
