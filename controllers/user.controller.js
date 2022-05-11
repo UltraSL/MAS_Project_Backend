@@ -26,7 +26,7 @@ exports.addUser = async function (req, res) {
     return res
       .status(200)
       .json({ code: 200, success: true, message: "Email already available" });
-console.log(body)
+  console.log(body);
   const user = new User({
     empNumber: body.empNumber,
     username: body.username,
@@ -86,14 +86,14 @@ exports.loginUser = async function (req, res) {
       return res
         .status(200)
         .json({ code: 200, success: false, message: "Invalid Password" });
-        console.log("1")
+    console.log("1");
     const token = utils.generateAuthToken(user);
 
     res.status(200).json({
       code: 200,
       success: true,
       token: token,
-      data : user,
+      data: user,
       message: "logged in successfully",
     });
   } catch (error) {
@@ -102,7 +102,6 @@ exports.loginUser = async function (req, res) {
       .json({ code: 500, success: false, message: "Internal Server Error" });
   }
 };
-
 
 /*
  
@@ -188,34 +187,51 @@ exports.getAllUsers = async function (req, res) {
 };
 //user update
 exports.updateUserProfileByID = async function (req, res) {
+  console.log("1")
   try {
     let user = await User.findById(req.params.id);
     let result;
-
-    if (req.file.path) {
-      result = await cloudinary.uploader.upload(req.file.path);
+    console.log("1")
+    if (req.files.image) {
+      result = await cloudinary.uploader.upload(req.files.image[0].path);
+      console.log("1")
+      const data = {
+        firstName: req.body.firstName || user.firstName,
+        username: req.body.username || user.username,
+        image: result.secure_url || user.image,
+        lastName: req.body.lastName || user.lastName,
+        email: req.body.email || user.email,
+        mobile: req.body.mobile || user.mobile,
+        supervisorName: req.body.supervisorName || user.supervisorName,
+        NICNumber: req.body.NICNumber || user.NICNumber,
+      };
+      console.log("1")
+      console.log("data", data);
+      user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+      res.status(200).json({
+        code: 200,
+        success: true,
+        data: user,
+        message: "User Updated Successfully!",
+      });
+    } else {
+      const data = {
+        firstName: req.body.firstName || user.firstName,
+        username: req.body.username || user.username,
+        lastName: req.body.lastName || user.lastName,
+        email: req.body.email || user.email,
+        mobile: req.body.mobile || user.mobile,
+        supervisorName: req.body.supervisorName || user.supervisorName,
+        NICNumber: req.body.NICNumber || user.NICNumber,
+      };
+      user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+      res.status(200).json({
+        code: 200,
+        success: true,
+        data: user,
+        message: "User Updated Successfully!",
+      });
     }
-
-    const data = {
-      firstName: req.body.firstName || user.firstName,
-      username: req.body.username || user.username,
-      image: result.secure_url || user.image,
-      lastName: req.body.lastName || user.lastName,
-      image: result?.secure_url || user.image,
-      email: req.body.email || user.email,
-      mobile: req.body.mobile || user.mobile,
-      supervisorName: req.body.supervisorName || user.supervisorName,
-      NICNumber: req.body.NICNumber || user.NICNumber,
-    };
-
-    console.log("data", data);
-    user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
-    res.status(200).json({
-      code: 200,
-      success: true,
-      data: user,
-      message: "User Updated Successfully!",
-    });
   } catch (err) {
     res
       .status(500)
