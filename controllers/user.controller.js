@@ -242,6 +242,41 @@ exports.updateUserProfileByID = async function (req, res) {
       .json({ code: 500, success: false, message: "Internal Server Error" });
   }
 };
+
+//update without image
+//user update
+exports.updateUserDetailsByID = async function (req, res) {
+  try {
+    let user = await User.findById(req.params.id);
+    let result;
+
+    const data = {
+      firstName: req.body.firstName || user.firstName,
+      // image: result.secure_url || user.image,
+      lastName: req.body.lastName || user.lastName,
+      email: req.body.email || user.email,
+      mobile: req.body.mobile || user.mobile,
+      supervisorName: req.body.supervisorName || user.supervisorName,
+      position:req.body.position || user.position,
+      department :req.body.department || user.department,
+    };
+
+    console.log("data", data);
+    user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.status(200).json({
+      code: 200,
+      success: true,
+      data: user,
+      message: "User Updated Successfully!",
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ code: 500, success: false, message: "Internal Server Error" });
+  }
+};
+
+
 //forgot password
 exports.forgotPassword = async function (req, res, next) {
   const { email } = req.body;

@@ -5,7 +5,7 @@ const UserController = require("../../controllers/user.controller");
 
 routes.post("/AddUser",UserController.addUser);
 
-routes.put("/EditUser/:id", 
+routes.put("/EditUserImage/:id", 
 
 storage.fields([
     {
@@ -19,6 +19,7 @@ storage.fields([
 routes.post("/Login", UserController.loginUser);
 routes.post("/forgotpassword", UserController.forgotPassword);
 routes.put("/resetpassword", UserController.resetPassword);
+routes.put("/EditUser/:id", UserController.updateUserDetailsByID);
 routes.get("/profile/:id", UserController.getUser);
 routes.get("/getAllUsers", UserController.getAllUsers);
 routes.delete("/deleteUser/:id", UserController.deleteUser);
