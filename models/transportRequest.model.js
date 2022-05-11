@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 
 const requestSchema = new Schema ({
     user_id : String,
+    username : String,
     reason : String,
     dateOfReservation : String,
     timeOfReservation : String,
