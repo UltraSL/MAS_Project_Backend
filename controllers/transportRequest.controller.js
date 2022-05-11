@@ -39,6 +39,18 @@ exports.getAllRequestsByUserId = async function (req, res) {
       })
 }
 
+//Get Requests By Status
+exports.getAllRequestsByStatus = async function (req, res) {
+  Request.find({status : req.params.status})
+      .exec(function (err, requests) {
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(requests);
+          }
+      })
+}
+
 //Get Request By Id
 exports.getRequestById = async function (req, res) {
   Request.findById(req.params.id)
