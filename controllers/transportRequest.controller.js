@@ -39,6 +39,18 @@ exports.getAllRequestsByUserId = async function (req, res) {
       })
 }
 
+//Get Request By Id
+exports.getRequestById = async function (req, res) {
+  Request.findById(req.params.id)
+      .exec(function (err, requests) {
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(requests);
+          }
+      })
+}
+
 //Update Request By Id
 exports.updateRequestById = async function (req, res) {
     Request.findByIdAndUpdate(req.params.id,
@@ -71,4 +83,24 @@ exports.deleteRequestById = async function (req, res) {
             res.status(200).json(deletedRequest);
           }
     })
+}
+
+//approve/reject Request By Id
+exports.ApproveRejectRequestById = async function (req, res) {
+  Request.findByIdAndUpdate(req.params.id,
+  {
+    $set: {
+      status: req.body.status
+    }
+  },
+  {
+    new: true
+  },
+  function (err, updatedRequest) {
+    if (err) {
+      res.status(400).json("Error updating teacher");
+    } else {
+      res.status(200).json(updatedRequest);
+    }
+  });
 }
