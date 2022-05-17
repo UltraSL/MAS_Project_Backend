@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 exports.sendRequest = async function (req, res) {
     let requestData = req.body;
     let request = new Request(requestData);
-
         request.save(async (error, addedRequest) => {
             if (error) {
                 res.status(400).json("Error"+ error)
