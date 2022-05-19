@@ -385,3 +385,15 @@ exports.deleteUser = async function (req, res) {
       .json({ code: 500, success: false, message: "Internal Server Error" });
   }
 };
+
+//Get User By department and position
+exports.getAllSupervisorsByDepartment = async function (req, res) {
+  User.find({position : "manager" , department: req.params.department })
+      .exec(function (err, users) {
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(users);
+          }
+      })
+}
