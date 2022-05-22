@@ -52,7 +52,7 @@ exports.getAllRequestsBySupervisor = async function (req, res) {
 
 //Get Requests By Status
 exports.getAllRequestsByStatus = async function (req, res) {
-  Request.find({status : req.params.status})
+  Request.find({status : {$ne : "pending"}})
       .exec(function (err, requests) {
           if(err){
               res.status(400).json("Not success");
@@ -90,11 +90,53 @@ exports.updateRequestById = async function (req, res) {
     },
     function (err, updatedRequest) {
       if (err) {
-        res.status(400).json("Error updating teacher");
+        res.status(400).json("Error updating request");
       } else {
         res.status(200).json(updatedRequest);
       }
     });
+}
+
+//Assign Driver and Vehicle Request By Id
+exports.driverVehicleAssignById = async function (req, res) {
+  Request.findByIdAndUpdate(req.params.id,
+  {
+    $set: {
+      assignedDriver: req.body.assignedDriver,
+      assignedVehicle: req.body.assignedVehicle,
+      status : "assigned"
+    }
+  },
+  {
+    new: true
+  },
+  function (err, updatedRequest) {
+    if (err) {
+      res.status(400).json("Error updating request");
+    } else {
+      res.status(200).json(updatedRequest);
+    }
+  });
+}
+
+// Driver Approve Request By Id
+exports.driverApproveRequestById = async function (req, res) {
+  Request.findByIdAndUpdate(req.params.id,
+  {
+    $set: {
+      isDriverAccepted: req.body.isDriverAccepted,
+    }
+  },
+  {
+    new: true
+  },
+  function (err, updatedRequest) {
+    if (err) {
+      res.status(400).json("Error updating request");
+    } else {
+      res.status(200).json(updatedRequest);
+    }
+  });
 }
 
 //Delete Request By Id
