@@ -6,6 +6,7 @@ const requestSchema = new Schema ({
     user_id : String,
     username : String,
     reason : String,
+    managerUserName : String,
     dateOfReservation : String,
     timeOfReservation : String,
     dateOfTrip : String,

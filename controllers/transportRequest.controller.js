@@ -38,6 +38,18 @@ exports.getAllRequestsByUserId = async function (req, res) {
       })
 }
 
+//Get Requests By supervisor username
+exports.getAllRequestsBySupervisor = async function (req, res) {
+  Request.find({managerUserName : req.params.managerUserName})
+      .exec(function (err, requests) {
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(requests);
+          }
+      })
+}
+
 //Get Requests By Status
 exports.getAllRequestsByStatus = async function (req, res) {
   Request.find({status : req.params.status})

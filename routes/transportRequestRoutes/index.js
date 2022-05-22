@@ -9,6 +9,7 @@ routes.put("/updateRequestById/:id", TransportRequestController.updateRequestByI
 routes.put("/approveRejectRequestById/:id", TransportRequestController.ApproveRejectRequestById);
 routes.delete("/deleteRequestById/:id", TransportRequestController.deleteRequestById);
 routes.get("/getAllRequestsByUserId/:id", TransportRequestController.getAllRequestsByUserId);
+routes.get("/getAllRequestsBySupervisor/:managerUserName", TransportRequestController.getAllRequestsBySupervisor);
 routes.get("/getAllRequestsByStatus/:status", TransportRequestController.getAllRequestsByStatus);
 routes.get("/getRequestById/:id", TransportRequestController.getRequestById);
 
