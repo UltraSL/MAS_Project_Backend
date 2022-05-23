@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Driver = require("../models/driver.model")
 const cloudinary = require("../lib/cloudinary");
 const { sendForgotEmail } = require("../lib/emailService");
 const utils = require("../lib/utils");
@@ -27,7 +28,7 @@ exports.addUser = async function (req, res) {
       .status(200)
       .json({ code: 200, success: true, message: "Email already available" });
   console.log(body);
-  const user = new User({
+  const user = new User({ 
     empNumber: body.empNumber,
     username: body.username,
     firstName: body.firstName,
@@ -40,6 +41,14 @@ exports.addUser = async function (req, res) {
     NICNumber: body.NICNumber,
     department: body.department,
   });
+  if(body.position=="driver"){
+      const driver = new Driver({
+        name: body.username,
+        mobile: body.mobile
+      });
+      await driver.save()
+
+  }
   try {
     var savedUser = await user.save();
     const token = utils.generateAuthToken(savedUser);
