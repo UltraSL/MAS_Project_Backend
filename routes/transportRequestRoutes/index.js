@@ -14,8 +14,7 @@ routes.get("/getAllRequestsByStatus", TransportRequestController.getAllRequestsB
 routes.get("/getRequestById/:id", TransportRequestController.getRequestById);
 routes.put("/driverVehicleAssignById/:id", TransportRequestController.driverVehicleAssignById);
 routes.put("/driverApproveRequestById/:id", TransportRequestController.driverApproveRequestById);
-
-
-
+routes.get("/getAllRequestsByDriver/:assignedDriver", TransportRequestController.getAllRequestsByDriver);
+routes.get("/getAllAcceptedRequests/:assignedDriver", TransportRequestController.getAllAcceptedRequests);
 
 module.exports = routes;
