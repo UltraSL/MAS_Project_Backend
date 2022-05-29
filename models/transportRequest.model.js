@@ -5,9 +5,9 @@ const Schema = mongoose.Schema
 const requestSchema = new Schema ({
     user_id : String,
     username : String,
+    user_image : String,
     reason : String,
     managerUserName : String,
-    dateOfReservation : String,
     timeOfReservation : String,
     dateOfTrip : String,
     timeOfTrip : String,
