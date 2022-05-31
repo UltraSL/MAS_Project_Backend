@@ -13,6 +13,7 @@ const userRegistrationValidation = (data) => {
       supervisorName: Joi.string().required().label("supervisorName"),
       NICNumber: Joi.string().required().label("NICNumber"), 
       department: Joi.string().required().label("department"),
+      confirmPassword: Joi.string().required().label("Confirm Password"),
 });
 return schema.validate(data);
 };

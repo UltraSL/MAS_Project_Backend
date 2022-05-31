@@ -37,6 +37,7 @@ exports.addUser = async function (req, res) {
     lastName: body.lastName,
     email: body.email,
     password: body.password,
+    confirmPassword: body.confirmPassword,
     position: body.position,
     mobile: body.mobile,
     supervisorName: body.supervisorName,
