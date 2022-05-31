@@ -7,7 +7,8 @@ const vehicleSchema = new Schema ({
     image: String,
     number : String,
     availablity : Boolean,
-    reservedDates : Array
+    reservedDates : Array,
+    
 })
 
 module.exports = mongoose.model('vehicle', vehicleSchema , 'vehicles')
