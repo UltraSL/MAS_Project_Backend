@@ -27,6 +27,10 @@ const userSchema = new Schema({
     required: true,
     select: false
   },
+  confirmPassword: {
+    type: String,
+    select: false
+  },
   NICNumber: {
     type: String,
     required: true,
@@ -59,6 +63,14 @@ userSchema.pre("save",async function(next){
   const user=this;
   if(user.isModified("password")){
     user.password=await bcrypt.hash(user.password,10);
+  }
+  next()
+})
+
+userSchema.pre("save",async function(next){
+  const user=this;
+  if(user.isModified("confirmPassword")){
+    user.confirmPassword=await bcrypt.hash(user.confirmPassword,10);
   }
   next()
 })
