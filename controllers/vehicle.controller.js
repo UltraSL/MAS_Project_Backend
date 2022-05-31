@@ -41,11 +41,25 @@ let  result= await cloudinary.uploader.upload(req.file.path);
 
 //Get Vehicles
 exports.getAllVehicles = async function (req, res) {
-  Vehicle.find({}).exec(function (err, vehicles) {
-    if (err) {
-      res.status(400).json("Not success");
-    } else {
-      res.status(200).json(vehicles);
-    }
-  });
-};
+    Vehicle.find({})
+        .exec(function (err, vehicles) {
+            if(err){
+                res.status(400).json("Not success");
+            } else {
+                res.status(200).json(vehicles);
+            }
+        })
+}
+
+//Get Available Drivers 
+exports.getAvailableVehicles = async function (req, res) {
+    let date = req.params.date;
+    Vehicle.find({ reservedDates : {$ne: date}})
+        .exec(function (err, vehicles) {
+            if(err){
+                res.status(400).json("Not success");
+            } else {
+                res.status(200).json(vehicles);
+            }
+        })
+}

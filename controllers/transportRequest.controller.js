@@ -103,7 +103,7 @@ exports.updateRequestById = async function (req, res) {
     Request.findByIdAndUpdate(req.params.id,
     {
       $set: {
-        reason: req.body.reason, dateOfReservation: req.body.dateOfReservation, timeOfReservation: req.body.timeOfReservation,
+        reason: req.body.reason,
         dateOfTrip: req.body.dateOfTrip,
         timeOfTrip: req.body.timeOfTrip, locationFrom: req.body.locationFrom, locationTo: req.body.locationTo,
         vehicleType: req.body.vehicleType
