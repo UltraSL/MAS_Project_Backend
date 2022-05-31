@@ -6,6 +6,8 @@ const utils = require("../lib/utils");
 const jsonwebtoken = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+var randomstring = require("randomstring");
+const nodemailer = require('nodemailer');
 const { userRegistrationValidation, loginValidate } = require("../validation");
 
 //user registration
@@ -28,7 +30,7 @@ exports.addUser = async function (req, res) {
       .status(200)
       .json({ code: 200, success: true, message: "Email already available" });
   console.log(body);
-  const user = new User({ 
+  const user = new User({
     empNumber: body.empNumber,
     username: body.username,
     firstName: body.firstName,
@@ -41,12 +43,12 @@ exports.addUser = async function (req, res) {
     NICNumber: body.NICNumber,
     department: body.department,
   });
-  if(body.position=="driver"){
-      const driver = new Driver({
-        name: body.username,
-        mobile: body.mobile
-      });
-      await driver.save()
+  if (body.position == "driver") {
+    const driver = new Driver({
+      name: body.username,
+      mobile: body.mobile
+    });
+    await driver.save()
 
   }
   try {
@@ -213,8 +215,8 @@ exports.updateUserProfileByID = async function (req, res) {
         mobile: req.body.mobile || user.mobile,
         supervisorName: req.body.supervisorName || user.supervisorName,
         NICNumber: req.body.NICNumber || user.NICNumber,
-        position:req.body.position || user.position,
-        department :req.body.department || user.department,
+        position: req.body.position || user.position,
+        department: req.body.department || user.department,
       };
       console.log("1")
       console.log("data", data);
@@ -234,8 +236,8 @@ exports.updateUserProfileByID = async function (req, res) {
         mobile: req.body.mobile || user.mobile,
         supervisorName: req.body.supervisorName || user.supervisorName,
         NICNumber: req.body.NICNumber || user.NICNumber,
-        position:req.body.position || user.position,
-        department :req.body.department || user.department,
+        position: req.body.position || user.position,
+        department: req.body.department || user.department,
       };
       user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
       res.status(200).json({
@@ -266,8 +268,8 @@ exports.updateUserDetailsByID = async function (req, res) {
       email: req.body.email || user.email,
       mobile: req.body.mobile || user.mobile,
       supervisorName: req.body.supervisorName || user.supervisorName,
-      position:req.body.position || user.position,
-      department :req.body.department || user.department,
+      position: req.body.position || user.position,
+      department: req.body.department || user.department,
     };
 
     console.log("data", data);
@@ -312,69 +314,69 @@ exports.forgotPassword = async function (req, res, next) {
   }
 };
 //reset password
-exports.resetPassword = async function (req, res) {
-  try {
-    if (req.query.token) {
-      const tokenParts = req.query.token.split(" ");
+// exports.resetPassword = async function (req, res) {
+//   try {
+//     if (req.query.token) {
+//       const tokenParts = req.query.token.split(" ");
 
-      if (
-        tokenParts[0] === "Bearer" &&
-        tokenParts[1].match(/\S+\.\S+\.\S+/) !== null
-      ) {
-        try {
-          const verification = jsonwebtoken.verify(
-            tokenParts[1],
-            process.env.ACCESS_TOKEN_SECRET
-          );
-          const user = await User.findOne({ email: verification.sub.email });
-          if (!user) {
-            return res.status(200).json({
-              code: 200,
-              success: false,
-              status: "Unauthorized",
-              msg: "Token is invalid. Please contact Administrator",
-            });
-          }
-          user.password = req.body.password;
-          await user.save();
-          const token = utils.generateAuthToken(user);
-          res.status(200).json({
-            code: 200,
-            success: true,
-            data: user,
-            token: token,
-            message: "Password reset successfully",
-          });
-        } catch (err) {
-          res.status(200).json({
-            code: 200,
-            success: false,
-            status: "Unauthorized1",
-            msg: "Can't reset your password. Please contact Administrator",
-          });
-        }
-      } else {
-        res.status(200).json({
-          code: 200,
-          success: false,
-          status: "Unauthorized2",
-          msg: "Can't reset your password. Please contact Administrator",
-        });
-      }
-    } else {
-      res.status(200).json({
-        code: 200,
-        success: false,
-        status: "TokenError",
-        msg: "Can't reset your password. Please contact Administrator",
-      });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ code: 500, success: false, message: "Internal Server Error" });
-  }
-};
+//       if (
+//         tokenParts[0] === "Bearer" &&
+//         tokenParts[1].match(/\S+\.\S+\.\S+/) !== null
+//       ) {
+//         try {
+//           const verification = jsonwebtoken.verify(
+//             tokenParts[1],
+//             process.env.ACCESS_TOKEN_SECRET
+//           );
+//           const user = await User.findOne({ email: verification.sub.email });
+//           if (!user) {
+//             return res.status(200).json({
+//               code: 200,
+//               success: false,
+//               status: "Unauthorized",
+//               msg: "Token is invalid. Please contact Administrator",
+//             });
+//           }
+//           user.password = req.body.password;
+//           await user.save();
+//           const token = utils.generateAuthToken(user);
+//           res.status(200).json({
+//             code: 200,
+//             success: true,
+//             data: user,
+//             token: token,
+//             message: "Password reset successfully",
+//           });
+//         } catch (err) {
+//           res.status(200).json({
+//             code: 200,
+//             success: false,
+//             status: "Unauthorized1",
+//             msg: "Can't reset your password. Please contact Administrator",
+//           });
+//         }
+//       } else {
+//         res.status(200).json({
+//           code: 200,
+//           success: false,
+//           status: "Unauthorized2",
+//           msg: "Can't reset your password. Please contact Administrator",
+//         });
+//       }
+//     } else {
+//       res.status(200).json({
+//         code: 200,
+//         success: false,
+//         status: "TokenError",
+//         msg: "Can't reset your password. Please contact Administrator",
+//       });
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ code: 500, success: false, message: "Internal Server Error" });
+//   }
+// };
 
 //user delete
 
@@ -397,12 +399,88 @@ exports.deleteUser = async function (req, res) {
 
 //Get User By department and position
 exports.getAllSupervisorsByDepartment = async function (req, res) {
-  User.find({position : "manager" , department: req.params.department })
-      .exec(function (err, users) {
-          if(err){
-              res.status(400).json("Not success");
-          } else {
-              res.status(200).json(users);
-          }
-      })
+  User.find({ position: "manager", department: req.params.department })
+    .exec(function (err, users) {
+      if (err) {
+        res.status(400).json("Not success");
+      } else {
+        res.status(200).json(users);
+      }
+    })
+}
+
+//forgot password random password send
+exports.resetPassword = async function (req, res) {
+
+  const randomPw = randomstring.generate({
+    length: 12,
+    charset: 'alphabetic'
+  });
+
+  console.log("Random pw :" +randomPw)
+  const hash = bcrypt.hashSync(randomPw, 10)
+
+  User.findOneAndUpdate({ email: req.params.email }, {
+    $set: { password: hash }
+  }, {
+    new: true,
+  },
+    function (err, updatedUser) {
+      if (err) {
+        res.send("Error updating user");
+      }
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'doctorapp100@gmail.com',
+          pass: 'doctor@100'
+        }
+      });
+ 
+      var mailOptions = {
+        from: 'doctorapp100@gmail.com',
+        to: `${req.params.email}`,
+        subject: "This is Your New Password For MAS System. We recommend you to change it next time you log",
+        text: `${randomPw}`
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          return res.status(401).send("Wrong Email or Phone Number");
+        } else {
+          console.log('Email sent: ' + info.response);
+          console.log('Email sent to :' + req.body.email)
+          
+        }
+      });
+      res.json(updatedUser)
+    })
+
+}
+
+
+ 
+
+exports.changePassword = async function (req, res) {
+
+  const randomPw = randomstring.generate({
+    length: 12,
+    charset: 'alphabetic'
+  });
+  console.log("RAndom pw :" +randomPw)
+
+  const hash = bcrypt.hashSync(randomPw, 10)
+  console.log(hash)
+  User.findOneAndUpdate({ email: req.params.email }, {
+    $set: { password: hash }
+  }, {
+    new: true,
+  },
+    function (err, updatedUser) {
+      if (err) {
+        res.send("Error updating user");
+      }
+      res.json(updatedUser)
+    })
 }

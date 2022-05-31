@@ -24,3 +24,16 @@ exports.getAllVehicles = async function (req, res) {
             }
         })
 }
+
+//Get Available Drivers 
+exports.getAvailableVehicles = async function (req, res) {
+    let date = req.params.date;
+    Vehicle.find({ reservedDates : {$ne: date}})
+        .exec(function (err, vehicles) {
+            if(err){
+                res.status(400).json("Not success");
+            } else {
+                res.status(200).json(vehicles);
+            }
+        })
+}

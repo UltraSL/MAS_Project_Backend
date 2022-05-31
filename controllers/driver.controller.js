@@ -13,9 +13,22 @@ exports.addDriver = async function (req, res) {
         });
   };
 
-//Get Requests
+//Get Drivers
 exports.getAllDrivers = async function (req, res) {
     Driver.find({})
+        .exec(function (err, drivers) {
+            if(err){
+                res.status(400).json("Not success");
+            } else {
+                res.status(200).json(drivers);
+            }
+        })
+}
+
+//Get Available Drivers 
+exports.getAvailableDrivers = async function (req, res) {
+    let date = req.params.date;
+    Driver.find({ WorkingDates : {$ne: date}})
         .exec(function (err, drivers) {
             if(err){
                 res.status(400).json("Not success");
