@@ -63,3 +63,23 @@ exports.getAvailableVehicles = async function (req, res) {
             }
         })
 }
+
+//update working dates
+exports.updateWorkingDates = async function (req, res) {
+    console.log(req.body)
+    let vehicleId = req.params.vehicleId;
+    let WorkingDates= req.body.workingDates;
+    Vehicle.findByIdAndUpdate(vehicleId, {
+        $push: {
+            WorkingDates: WorkingDates
+        }
+       
+    }, { new: true }, function (err, vehicle) {
+        console.log(vehicle)
+        if (err) {
+            res.status(400).json("Error"+ err)
+        } else {
+            res.status(200).json(vehicle);
+        }
+    });
+}
