@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 //Add Request
 exports.sendRequest = async function (req, res) {
     let requestData = req.body;
+    console.log(requestData)
     let request = new Request(requestData);
         request.save(async (error, addedRequest) => {
             if (error) {
@@ -46,6 +47,48 @@ exports.getAllRequestsBySupervisor = async function (req, res) {
               res.status(400).json("Not success");
           } else {
               res.status(200).json(requests);
+          }
+      })
+}
+
+//Get Request Notifications By Manager And Pending
+exports.getAllRequestsByManagerAndPending = async function (req, res) {
+  console.log("1")
+  Request.find({status : "pending", managerUserName: req.params.managerUserName})
+      .exec(function (err, notifications) {
+        console.log("2")
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(notifications);
+          }
+      })
+}
+
+//Get Request Notifications By User And Approved Or Reject
+exports.getAllRequestsByUserAndApprovedOrReject = async function (req, res) {
+  console.log("1")
+  Request.find({$or: [{status: "approved"}, {status: "rejected"}], username: req.params.username})
+      .exec(function (err, notifications) {
+        console.log("2")
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(notifications);
+          }
+      })
+}
+
+//Get Request Notifications By Assigned Driver
+exports.getAllRequestsByAssignedDriver = async function (req, res) {
+  console.log("1")
+  Request.find({isDriverAccepted: false ,assignedDriver: req.params.username})
+      .exec(function (err, notifications) {
+        console.log("2")
+          if(err){
+              res.status(400).json("Not success");
+          } else {
+              res.status(200).json(notifications);
           }
       })
 }
