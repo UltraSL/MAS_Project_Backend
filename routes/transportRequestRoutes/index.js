@@ -12,9 +12,14 @@ routes.get("/getAllRequestsByUserId/:id", TransportRequestController.getAllReque
 routes.get("/getAllRequestsBySupervisor/:managerUserName", TransportRequestController.getAllRequestsBySupervisor);
 routes.get("/getAllRequestsByStatus", TransportRequestController.getAllRequestsByStatus);
 routes.get("/getRequestById/:id", TransportRequestController.getRequestById);
-routes.put("/driverVehicleAssignById/:id", TransportRequestController.driverVehicleAssignById);
+routes.put("/driverVehicleAssignById/:id", TransportRequestController.driverVehicleAssignById); 
 routes.put("/driverApproveRequestById/:id", TransportRequestController.driverApproveRequestById);
 routes.get("/getAllRequestsByDriver/:assignedDriver", TransportRequestController.getAllRequestsByDriver);
 routes.get("/getAllAcceptedRequests/:assignedDriver", TransportRequestController.getAllAcceptedRequests);
+routes.get("/getAllRequestsByManagerAndPending/:managerUserName", TransportRequestController.getAllRequestsByManagerAndPending);
+routes.get("/getAllRequestsByUserAndApprovedOrReject/:username", TransportRequestController.getAllRequestsByUserAndApprovedOrReject);
+routes.get("/getAllRequestsByAssignedDriver/:username", TransportRequestController.getAllRequestsByAssignedDriver);
+
+
 
 module.exports = routes;

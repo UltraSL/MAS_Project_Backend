@@ -3,25 +3,18 @@ const Schema = mongoose.Schema;
 
 
 const notification = new Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    message: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    },
-    status: {
-        type: Boolean,
-        default: false
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+    reqId : String,
+    user_id : String,
+    managerUserName : String,
+    assignedDriver : String,
+    isDriverAccepted : Boolean,
+    message : String,
+    status : {
+        type: [{
+            type: String,
+            enum: ['pending', 'approved', 'rejected', 'assigned']
+        }],
+        default: ['pending']
     }
 });
 

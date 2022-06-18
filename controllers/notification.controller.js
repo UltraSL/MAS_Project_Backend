@@ -3,11 +3,15 @@ const Notification = require("../models/notification.model");
 //add notification
 exports.addNotification = (req, res) => {
     const notification = new Notification({
-        title: req.body.title,
-        message: req.body.message,
-        status: req.body.status,
-        user: req.body.user
+        reqId : req.body.reqId,
+        user_id : req.body.user_id,
+        managerUserName : req.body.managerUserName,
+        assignedDriver : req.body.assignedDriver,
+        isDriverAccepted : req.body.isDriverAccepted,
+        message : req.body.message,
+        status : req.body.status
     });
+    
     notification.save((err, notification) => {
         if (err) {
         res.json({

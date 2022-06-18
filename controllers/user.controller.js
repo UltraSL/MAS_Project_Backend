@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const Driver = require("../models/driver.model")
 const cloudinary = require("../lib/cloudinary");
-const { sendForgotEmail } = require("../lib/emailService");
+const sendForgotEmail  = require("../lib/emailService");
 const utils = require("../lib/utils");
 const jsonwebtoken = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
@@ -70,7 +70,6 @@ exports.addUser = async function (req, res) {
   }
 };
 //user login
-
 exports.loginUser = async function (req, res) {
   try {
     const { error } = loginValidate(req.body);
@@ -106,7 +105,7 @@ exports.loginUser = async function (req, res) {
       success: true,
       token: token,
       data: user,
-      message: "logged in successfully",
+      message: "logged in successfully", 
     });
   } catch (error) {
     res
@@ -288,99 +287,6 @@ exports.updateUserDetailsByID = async function (req, res) {
   }
 };
 
-
-//forgot password
-exports.forgotPassword = async function (req, res, next) {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res
-        .status(200)
-        .json({ code: 200, success: false, message: "User not found" });
-    }
-
-    const token = utils.generateAuthToken(user);
-
-    sendForgotEmail(token.token, user);
-    res.status(200).json({
-      code: 200,
-      success: true,
-      data: "Please check your email to reset password.",
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ code: 500, success: false, message: "Internal Server Error" });
-  }
-};
-//reset password
-// exports.resetPassword = async function (req, res) {
-//   try {
-//     if (req.query.token) {
-//       const tokenParts = req.query.token.split(" ");
-
-//       if (
-//         tokenParts[0] === "Bearer" &&
-//         tokenParts[1].match(/\S+\.\S+\.\S+/) !== null
-//       ) {
-//         try {
-//           const verification = jsonwebtoken.verify(
-//             tokenParts[1],
-//             process.env.ACCESS_TOKEN_SECRET
-//           );
-//           const user = await User.findOne({ email: verification.sub.email });
-//           if (!user) {
-//             return res.status(200).json({
-//               code: 200,
-//               success: false,
-//               status: "Unauthorized",
-//               msg: "Token is invalid. Please contact Administrator",
-//             });
-//           }
-//           user.password = req.body.password;
-//           await user.save();
-//           const token = utils.generateAuthToken(user);
-//           res.status(200).json({
-//             code: 200,
-//             success: true,
-//             data: user,
-//             token: token,
-//             message: "Password reset successfully",
-//           });
-//         } catch (err) {
-//           res.status(200).json({
-//             code: 200,
-//             success: false,
-//             status: "Unauthorized1",
-//             msg: "Can't reset your password. Please contact Administrator",
-//           });
-//         }
-//       } else {
-//         res.status(200).json({
-//           code: 200,
-//           success: false,
-//           status: "Unauthorized2",
-//           msg: "Can't reset your password. Please contact Administrator",
-//         });
-//       }
-//     } else {
-//       res.status(200).json({
-//         code: 200,
-//         success: false,
-//         status: "TokenError",
-//         msg: "Can't reset your password. Please contact Administrator",
-//       });
-//     }
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ code: 500, success: false, message: "Internal Server Error" });
-//   }
-// };
-
-//user delete
-
 exports.deleteUser = async function (req, res) {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -410,9 +316,20 @@ exports.getAllSupervisorsByDepartment = async function (req, res) {
     })
 }
 
+exports.getDriverByUserName = async function (req, res) {
+  User.find({ username: req.params.username })
+    .exec(function (err, users) {
+      if (err) {
+        res.status(400).json("Not success");
+      } else {
+        res.status(200).json(users);
+      }
+    })
+}
+
 //forgot password random password send
 exports.resetPassword = async function (req, res) {
-
+ 
   const randomPw = randomstring.generate({
     length: 12,
     charset: 'alphabetic'
@@ -430,36 +347,12 @@ exports.resetPassword = async function (req, res) {
       if (err) {
         res.send("Error updating user");
       }
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'doctorapp100@gmail.com',
-          pass: 'doctor@100'
-        }
-      });
- 
-      var mailOptions = {
-        from: 'doctorapp100@gmail.com',
-        to: `${req.params.email}`,
-        subject: "This is Your New Password For MAS System. We recommend you to change it next time you log",
-        text: `${randomPw}`
-      };
-
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-          return res.status(401).send("Wrong Email or Phone Number");
-        } else {
-          console.log('Email sent: ' + info.response);
-          console.log('Email sent to :' + req.body.email)
-          
-        }
-      });
+      sendForgotEmail.sendForgotEmail(randomPw, updatedUser )
       res.json(updatedUser)
     })
 
 }
-
+ 
 
  
 
