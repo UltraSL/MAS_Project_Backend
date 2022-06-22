@@ -11,7 +11,7 @@ const requestSchema = new Schema ({
     dateOfTrip : String,
     timeOfTrip : String,
     time : String,
-    distance : String,
+    distance : Number,
     locationFrom : String,
     locationTo : String,
     vehicleType : String,
