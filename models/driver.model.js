@@ -7,7 +7,12 @@ const driverSchema = new Schema ({
     mobile : String,
     availablity : Boolean,
     WorkingDates :Array,
-    milage: Number,
+    milage: {
+        type: Number,
+        default: 0
+    }
+    
+    ,
    
 })
 
