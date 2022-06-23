@@ -1,9 +1,20 @@
 const Emergency = require("../models/emergency.model");
+const User = require("../models/user.model");
 //Add Emergency
 exports.sendEmergency = async function (req, res) {
     let emergencyData = req.body;
-    console.log(emergencyData)
-    let emergency = new Emergency(emergencyData);
+const user = await User.findById(emergencyData.user_id);
+
+const emergency = new Emergency({
+    user_id: user._id,
+    username: user.username,
+    message: emergencyData.message,
+    date: new Date()
+});
+
+
+
+    
         emergency.save(async (error, addedEmergency) => {
             if (error) {
                 res.status(400).json("Error"+ error)
