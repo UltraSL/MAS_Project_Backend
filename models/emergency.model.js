@@ -5,11 +5,7 @@ const emergency = new Schema({
   user_id: String,
   username: String,
   message: String,
-  date: {
-    type: Date,
-    default: Date.now
-
-  },
+  date: String,
 });
 
 module.exports = mongoose.model("emergency", emergency);

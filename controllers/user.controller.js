@@ -335,21 +335,33 @@ exports.resetPassword = async function (req, res) {
     charset: 'alphabetic'
   });
 
-  console.log("Random pw :" +randomPw)
+  const email = req.params.email;
   const hash = bcrypt.hashSync(randomPw, 10)
+  const user = await User.findOne({ email });
+  if(!user){
+    return res.status(200).json({
+      code: 200,
+      success: false,
+      message : "no user"
+    });
+  }
+  if(user){
+    User.findOneAndUpdate({ email: req.params.email }, {
+      $set: { password: hash }
+    }, {
+      new: true,
+    },
+      function (err, updatedUser) {
+        if (err) {
+          res.send("Error updating user");
+        }
+        sendForgotEmail.sendForgotEmail(randomPw, updatedUser )
+        res.json(updatedUser)
+      })
+  }
 
-  User.findOneAndUpdate({ email: req.params.email }, {
-    $set: { password: hash }
-  }, {
-    new: true,
-  },
-    function (err, updatedUser) {
-      if (err) {
-        res.send("Error updating user");
-      }
-      sendForgotEmail.sendForgotEmail(randomPw, updatedUser )
-      res.json(updatedUser)
-    })
+
+
 
 }
  
