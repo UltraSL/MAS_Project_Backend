@@ -9,10 +9,12 @@ const driverSchema = new Schema ({
     WorkingDates :Array,
     milage: {
         type: Number,
+        //expires in 30 days from creation date (30*24*60*60*1000) = 2592000 milliseconds (30 days) this field
+        expires: 2592000,
         default: 0
     }
     
-    ,
+    
    
 })
 
