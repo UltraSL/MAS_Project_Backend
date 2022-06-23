@@ -1,15 +1,19 @@
 const Emergency = require("../models/emergency.model");
 const User = require("../models/user.model");
+const date = require("date-and-time");
 //Add Emergency
 exports.sendEmergency = async function (req, res) {
     let emergencyData = req.body;
 const user = await User.findById(emergencyData.user_id);
+const now = new Date();
+const value1 = date.format(now, "YYYY/MM/DD");
+const value2 = date.format(now, "HH:mm:ss");
 
 const emergency = new Emergency({
     user_id: user._id,
     username: user.username,
     message: emergencyData.message,
-    date: new Date()
+    date: value1+" "+value2
 });
 
 
