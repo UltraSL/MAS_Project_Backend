@@ -17,7 +17,10 @@ const requestSchema = new Schema ({
     vehicleType : String,
     assignedDriver : String,
     assignedVehicle : String,
-    isDriverAccepted : Boolean,
+    isDriverAccepted : {
+        type: Boolean,
+        default: false
+    },
     status : {
         type: [{
             type: String,
