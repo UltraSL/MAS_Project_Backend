@@ -27,7 +27,16 @@ const requestSchema = new Schema ({
             enum: ['pending', 'approved', 'rejected', 'assigned']
         }],
         default: ['pending']
+    },
+  
+
+    //expies with dateOfTrip + timeOfTrip
+  createdAt : {
+    type: Date,
+    default: Date.now,
+    expires: 'dateOfTrip + timeOfTrip'
     }
+
 })
 
 module.exports = mongoose.model('request', requestSchema , 'requests')
