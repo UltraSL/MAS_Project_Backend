@@ -6,7 +6,7 @@ const userRegistrationValidation = (data) => {
       firstName: Joi.string().required().label("firstName"),
       lastName: Joi.string().required().label("lastName"),
       email: Joi.string().email().required().label("Email"),
-      password: Joi.string().required().label("Password").min(6),
+      password: Joi.string().required().label("Password").min(8),
       position: Joi.string().required().label("position"),
       mobile: Joi.string().required().label("mobile"),
       username: Joi.string().required().label("username"),
@@ -21,7 +21,7 @@ return schema.validate(data);
 const loginValidate = (data) => {
   const schema = Joi.object({
     email: Joi.string().email().required().label("Email"),
-    password: Joi.string().min(6).required(),
+    password: Joi.string().min(8).required(),
   }); 
   return schema.validate(data);
 };

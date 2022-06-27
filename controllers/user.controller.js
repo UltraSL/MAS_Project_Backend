@@ -24,11 +24,7 @@ exports.addUser = async function (req, res) {
       message: error.details[0].message,
     });
 
-  const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist)
-    return res
-      .status(200)
-      .json({ code: 200, success: true, message: "Email already available" });
+  
 
   const empNumberExist = await User.findOne({ empNumber: req.body.empNumber });
   if (empNumberExist)
@@ -40,21 +36,39 @@ exports.addUser = async function (req, res) {
         message: "Emp Number already available",
       });
 
+      const UserNameExist = await User.findOne({ username: req.body.username });
+      if (UserNameExist)
+        return res
+          .status(200)
+          .json({
+            code: 200,
+            success: true,
+            message: "username already available",
+          });
+
+      const emailExist = await User.findOne({ email: req.body.email });
+  if (emailExist)
+    return res
+      .status(200)
+      .json({ code: 200, success: true, message: "Email already available" });
+
   const NICNumberExist = await User.findOne({ NICNumber: req.body.NICNumber });
   if (NICNumberExist)
     return res
       .status(200)
       .json({ code: 200, success: true, message: "NIC already available" });
 
-  const UserNameExist = await User.findOne({ username: req.body.username });
-  if (UserNameExist)
-    return res
-      .status(200)
-      .json({
-        code: 200,
-        success: true,
-        message: "username already available",
-      });
+      const MobileExist = await User.findOne({ mobile: req.body.mobile });
+      if (MobileExist)
+        return res
+          .status(200)
+          .json({
+            code: 200,
+            success: true,
+            message: "Mobile Number already available",
+          });
+
+ 
 
   console.log(body);
   const user = new User({
@@ -140,39 +154,7 @@ exports.loginUser = async function (req, res) {
   }
 };
 
-/*
- 
-exports.loginUser = async function (req, res) {
-var AdminData = req.body;
-console.log(AdminData);
-User.findOne({ email: AdminData.email }, (error, User) => {
-  if (error) {
-    console.log(error);
-  } else if (!User) {
-    res.status(401).send("Invalid email");
-    
-  } else {
 
-    bcrypt.compare(AdminData.password, User.password, (error,result) => {
-      if(error){
-        console.log(error)
-      } else if(!result){
-        res.status(402).send("Invalid Password");
-      }
-      else if(result){
-        let payload = { subject: User._id };
-        let AdminToken = jwt.sign(payload, "secretKey");
-        console.log("no Error password")
-        res.status(200).json({ AdminToken, User });
-      }
-    })
-
-  } 
-
-});
-};
-
-*/
 
 //get user by id
 exports.getUser = function (req, res) {
@@ -228,42 +210,13 @@ exports.updateUserProfileByID = async function (req, res) {
   try {
     let user = await User.findById(req.params.id);
     let result;
-    console.log("1");
+
     if (req.files.image) {
       result = await cloudinary.uploader.upload(req.files.image[0].path);
-      console.log("1");
+
       const data = {
-        firstName: req.body.firstName || user.firstName,
-        username: req.body.username || user.username,
         image: result.secure_url || user.image,
-        lastName: req.body.lastName || user.lastName,
-        email: req.body.email || user.email,
-        mobile: req.body.mobile || user.mobile,
-        supervisorName: req.body.supervisorName || user.supervisorName,
-        NICNumber: req.body.NICNumber || user.NICNumber,
-        position: req.body.position || user.position,
-        department: req.body.department || user.department,
-      };
-      console.log("1");
-      console.log("data", data);
-      user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
-      res.status(200).json({
-        code: 200,
-        success: true,
-        data: user,
-        message: "User Updated Successfully!",
-      });
-    } else {
-      const data = {
-        firstName: req.body.firstName || user.firstName,
-        username: req.body.username || user.username,
-        lastName: req.body.lastName || user.lastName,
-        email: req.body.email || user.email,
-        mobile: req.body.mobile || user.mobile,
-        supervisorName: req.body.supervisorName || user.supervisorName,
-        NICNumber: req.body.NICNumber || user.NICNumber,
-        position: req.body.position || user.position,
-        department: req.body.department || user.department,
+
       };
       user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
       res.status(200).json({
