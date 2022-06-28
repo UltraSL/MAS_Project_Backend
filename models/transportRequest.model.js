@@ -1,3 +1,4 @@
+const { date } = require('@hapi/joi')
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
@@ -29,13 +30,12 @@ const requestSchema = new Schema ({
         default: ['pending']
     },
   
-
-    //expies with dateOfTrip + timeOfTrip
-  createdAt : {
+createAt : {
     type: Date,
     default: Date.now,
-    expires: 'dateOfTrip + timeOfTrip'
-    }
+    expires: '7d'
+}
+
 
 })
 
