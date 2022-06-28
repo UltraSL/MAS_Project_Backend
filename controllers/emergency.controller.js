@@ -11,6 +11,7 @@ exports.sendEmergency = async function (req, res) {
 
   const emergency = new Emergency({
     user_id: user._id,
+    mobile: user.mobile,
     username: user.username,
     message: emergencyData.message,
     date: value1 + " " + value2,
