@@ -39,6 +39,7 @@ exports.getAllEmergencies = async function (req, res) {
 
 //Get Emergencies By User Id
 exports.getAllEmergenciesByUserId = async function (req, res) {
+  
   Emergency.find({ user_id: req.params.id }).exec(function (err, emergencies) {
     if (err) {
       res.status(400).json("Not success");
