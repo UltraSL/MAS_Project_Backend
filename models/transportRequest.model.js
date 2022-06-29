@@ -9,7 +9,7 @@ const requestSchema = new Schema ({
     user_image : String,
     reason : String,
     managerUserName : String,
-    dateOfTrip : String,
+    dateOfTrip : Date,
     timeOfTrip : String,
     time : String,
     distance : Number,
@@ -33,7 +33,7 @@ const requestSchema = new Schema ({
 createAt : {
     type: Date,
     default: Date.now,
-    expires: '7d'
+    expires: '1d'+'dateOfTrip'
 }
 
 
